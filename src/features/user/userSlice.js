@@ -2,49 +2,37 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 /* THUNKS */
-export const loginUser = createAsyncThunk(
-	'user/loginUser',
-	async (user, { rejectWithValue }) => {
-		try {
-			const resp = await axios.post(
-				'http://localhost:3001/api/users/login',
-				user
-			);
+export const loginUser = createAsyncThunk('user/loginUser', async (user, { rejectWithValue }) => {
+	try {
+		const resp = await axios.post('http://localhost:3001/api/users/login', user);
 
-			return resp.data;
-		} catch (err) {
-			return rejectWithValue(err.response.data);
-		}
+		return resp.data;
+	} catch (err) {
+		return rejectWithValue(err.response.data);
 	}
-);
+});
 
-export const registerUser = createAsyncThunk(
-	'user/registerUser',
-	async (user, { rejectWithValue }) => {
-		try {
-			const resp = await axios.post(
-				'http://localhost:3001/api/users/register',
-				user
-			);
+export const registerUser = createAsyncThunk('user/registerUser', async (user, { rejectWithValue }) => {
+	try {
+		const resp = await axios.post('http://localhost:3001/api/users/register', user);
 
-			return resp.data;
-		} catch (err) {
-			return rejectWithValue(err.response.data);
-		}
+		return resp.data;
+	} catch (err) {
+		return rejectWithValue(err.response.data);
 	}
-);
+});
 
 const userSlice = createSlice({
 	name: 'user',
 	initialState: {
 		currentUser: null,
 		loading: 'idle',
-		error: null,
+		error: null
 	},
 	reducers: {
 		setUser: (state, action) => {
 			state.currentUser = action.payload;
-		},
+		}
 	},
 	extraReducers: {
 		[registerUser.pending]: (state, action) => {
@@ -65,7 +53,8 @@ const userSlice = createSlice({
 
 				if (action.payload) {
 					state.error = action.payload.errMsg;
-				} else {
+				}
+				else {
 					state.error = action.error;
 				}
 			}
@@ -87,12 +76,13 @@ const userSlice = createSlice({
 				state.loading = 'idle';
 				if (action.payload) {
 					state.error = action.payload.errMsg;
-				} else {
+				}
+				else {
 					state.error = action.error;
 				}
 			}
-		},
-	},
+		}
+	}
 });
 
 export const { setUser } = userSlice.actions;

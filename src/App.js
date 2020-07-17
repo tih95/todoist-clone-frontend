@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectUser, setUser } from './features/user/userSlice';
@@ -26,6 +26,7 @@ function App() {
 		}
 	}, [dispatch]);
 
+	console.log('user', user);
 	return (
 		<div>
 			<ToastContainer
@@ -40,13 +41,10 @@ function App() {
 			<Header />
 			<Suspense fallback={<div>Loading...</div>}>
 				<Switch>
-					<Route
-						exact
-						path="/"
-						render={() => (user ? <Home /> : <Landing />)}
-					/>
-					<Route exact path="/login" component={Login} />
-					<Route exact path="/register" component={Register} />
+					<Route exact path="/" render={() => user ? <Redirect to="/home" /> : <Landing />} />
+					<Route exact path="/home" render={props => user ? <Home {...props} /> : <Redirect to="/login" />} />
+					<Route exact path="/login" render={props => user ? <Redirect to="/home" /> : <Login />} />
+					<Route exact path="/register" render={props => user ? <Redirect to="/home"/> : <Register />} />
 				</Switch>
 			</Suspense>
 		</div>
