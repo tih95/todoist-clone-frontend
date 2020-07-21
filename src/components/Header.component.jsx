@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Box, Button } from '@chakra-ui/core';
+import { Box, Button, Text } from '@chakra-ui/core';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -16,22 +16,31 @@ const Header = () => {
 	};
 
 	return (
-		<Box>
-			<Link to="/">TODOIST</Link>
+		<Box
+			padding="1em"
+			display="flex"
+			justifyContent="space-between"
+			alignItems="center"
+		>
+			<Link to="/">
+				<Text fontSize="1.2em" fontWeight="bold">
+					todoist
+				</Text>
+			</Link>
 
 			{user ? (
 				<Button onClick={handleLogout}>Log Out</Button>
 			) : (
-				<React.Fragment>
+				<Box>
 					<Link to="/register">
 						<Button backgroundColor="#6246ea" _hover={{ backgroundColor: '#806aef' }} color="#fffffe">
 							Register
 						</Button>
 					</Link>
 					<Link to="/login">
-						<Button>Login</Button>
+						<Button marginLeft="0.5em" variant="outline" variantColor="purple">Login</Button>
 					</Link>
-				</React.Fragment>
+				</Box>
 			)}
 		</Box>
 	);

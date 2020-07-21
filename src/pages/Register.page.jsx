@@ -20,7 +20,7 @@ import { registerUser } from '../features/user/userSlice';
 
 const Register = ({ history }) => {
 	const [ showPassword, setShowPassword ] = useState(false);
-	const loadingStatus = useSelector(state => state.user.loading);
+	const loadingStatus = useSelector((state) => state.user.loading);
 	const dispatch = useDispatch();
 	const formik = useFormik({
 		initialValues: {
@@ -33,7 +33,7 @@ const Register = ({ history }) => {
 			email: Yup.string().email('Must be valid email format').required('Must enter an email'),
 			password: Yup.string().min(8, 'Must be 8 or more characters').required('Must enter a password')
 		}),
-		onSubmit: async values => {
+		onSubmit: async (values) => {
 			const resultAction = await dispatch(registerUser(values));
 
 			if (registerUser.fulfilled.match(resultAction)) {

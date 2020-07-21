@@ -25,7 +25,7 @@ export const registerUser = createAsyncThunk('user/registerUser', async (user, {
 const userSlice = createSlice({
 	name: 'user',
 	initialState: {
-		currentUser: null,
+		currentUser: JSON.parse(window.localStorage.getItem('loggedInUser')),
 		loading: 'idle',
 		error: null
 	},
