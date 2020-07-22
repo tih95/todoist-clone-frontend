@@ -31,16 +31,16 @@ const Header = () => {
 			</Link>
 
 			{user ? (
-				<Button onClick={handleLogout}>Log Out</Button>
+				<Button size="sm" onClick={handleLogout}>Log Out</Button>
 			) : (
 				<Box>
 					<Link to="/register">
-						<Button backgroundColor="#6246ea" _hover={{ backgroundColor: '#806aef' }} color="#fffffe">
+						<Button size="sm" backgroundColor="#6246ea" _hover={{ backgroundColor: '#806aef' }} color="#fffffe">
 							Register
 						</Button>
 					</Link>
 					<Link to="/login">
-						<Button marginLeft="0.5em" variant="outline" variantColor="purple">Login</Button>
+						<Button size="sm" marginLeft="0.5em" variant="outline" variantColor="purple">Login</Button>
 					</Link>
 				</Box>
 			)}

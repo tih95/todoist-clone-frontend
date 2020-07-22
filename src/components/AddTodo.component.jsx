@@ -60,6 +60,7 @@ const AddTodo = ({ selectedProject }) => {
 			<form onSubmit={formik.handleSubmit}>
 				<Flex borderRadius="5px" padding="0.5em 1em 1em 1em" flexDirection="column" border="1px solid #E2E8F0">
 					<Input
+						size="sm"
 						padding="0"
 						border="none"
 						name="task"
@@ -131,6 +132,7 @@ const AddTodo = ({ selectedProject }) => {
 									type="button"
 									variant="outline"
 									as={Button}
+									size="sm"
 									marginLeft="1em"
 								>
 									{projects.find((project) => project.p_id === formik.values.p_id).name}
@@ -159,7 +161,7 @@ const AddTodo = ({ selectedProject }) => {
 								</MenuList>
 							</Menu>
 						</Flex>
-						<Button variantColor="purple" type="submit">
+						<Button size="sm" variantColor="purple" type="submit">
 							Add
 						</Button>
 					</Flex>

@@ -49,7 +49,7 @@ const TodoItem = ({ todo }) => {
 			>
 				{todo.task}
 			</Checkbox>
-			<Divider />
+      <Divider />
 		</Box>
 	);
 };

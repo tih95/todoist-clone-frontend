@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Text, Box, Flex } from '@chakra-ui/core';
+import { Text, Box, AccordionItem, AccordionHeader, AccordionIcon, AccordionPanel, Accordion } from '@chakra-ui/core';
 import { selectProjects, selectSelectedProject, setSelectedProject } from '../features/projects/projectsSlice';
 import AddTodo from '../components/AddTodo.component';
 import TodoList from '../components/TodoList.component';
@@ -25,9 +25,9 @@ const Project = ({ match }) => {
 		return <div>Loading...</div>;
 	}
 
-	const notCompletedTodos = todos.filter(todo => !todo.completed);
+	const notCompletedTodos = todos.filter((todo) => !todo.completed);
 
-	const completedTodos = todos.filter(todo => todo.completed);
+	const completedTodos = todos.filter((todo) => todo.completed);
 
 	return (
 		<Box padding="2em" marginLeft="230px">
@@ -43,11 +43,10 @@ const Project = ({ match }) => {
 						Why don't you add a todo to get started?
 					</Text>
 				) : (
-					<React.Fragment>
+					<>
 						<TodoList todos={notCompletedTodos} />
 						<TodoList todos={completedTodos} />
-					</React.Fragment>
-					
+					</>
 				)}
 			</Box>
 		</Box>

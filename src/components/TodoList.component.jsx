@@ -5,7 +5,7 @@ import TodoItem from './TodoItem.component';
 
 const TodoList = ({ todos }) => {
   return (
-    <Box width="100%">
+    <Box width="100%" n>
       {todos.map(todo => <TodoItem key={todo.t_id} todo={todo} />)}
     </Box>
   )
