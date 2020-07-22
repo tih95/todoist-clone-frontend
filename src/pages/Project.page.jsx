@@ -16,7 +16,6 @@ const Project = ({ match }) => {
 	useEffect(
 		() => {
 			const currentProject = projects.find((project) => project.name === match.params.projectName);
-			console.log(currentProject);
 			dispatch(setSelectedProject(currentProject));
 		},
 		[ projects, match.params.projectName, dispatch ]
@@ -26,23 +25,31 @@ const Project = ({ match }) => {
 		return <div>Loading...</div>;
 	}
 
+	const notCompletedTodos = todos.filter(todo => !todo.completed);
+
+	const completedTodos = todos.filter(todo => todo.completed);
+
 	return (
-		<Box padding="1em">
-			<Text textTransform="capitalize" fontWeight="bold" fontSize="1.2em">
+		<Box padding="2em" marginLeft="230px">
+			<Text marginBottom="1em" textTransform="capitalize" fontWeight="bold" fontSize="1.2em">
 				{selectedProject.name}
 			</Text>
 
 			<AddTodo selectedProject={selectedProject} />
 
-			<Flex>
+			<Box>
 				{todos.length === 0 ? (
 					<Text width="100%" marginTop="50px" textAlign="center">
 						Why don't you add a todo to get started?
 					</Text>
 				) : (
-					<TodoList todos={todos} />
+					<React.Fragment>
+						<TodoList todos={notCompletedTodos} />
+						<TodoList todos={completedTodos} />
+					</React.Fragment>
+					
 				)}
-			</Flex>
+			</Box>
 		</Box>
 	);
 };

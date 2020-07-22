@@ -8,7 +8,7 @@ import { fetchProjects } from '../features/projects/projectsSlice';
 import { selectUser } from '../features/user/userSlice';
 import { fetchTodos } from '../features/todos/todosSlice';
 import AllTodos from './AllTodos.page';
-import SidebarContent from '../components/SidebarContent.component';
+import Sidebar from '../components/Sidebar.component';
 
 const TodoApp = ({ match }) => {
   const dispatch = useDispatch();
@@ -16,7 +16,6 @@ const TodoApp = ({ match }) => {
 
   useEffect(
 		() => {
-			console.log('running userhome useeffect');
 			const setProjectsAndTodos = async () => {
 				const config = {
 					headers: {
@@ -30,11 +29,9 @@ const TodoApp = ({ match }) => {
 		},
 		[ user.token, dispatch ]
   );
-  
-  console.log(match.path);
   return (
     <div>
-      <SidebarContent />
+      <Sidebar />
       <Switch>
         <Route exact path={`${match.path}`} component={AllTodos} />
         <Route exact path={`${match.path}/projects/:projectName`} component={Project} />

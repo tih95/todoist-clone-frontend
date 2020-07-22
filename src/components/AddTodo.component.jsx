@@ -12,6 +12,8 @@ import {
 	MenuOptionGroup,
 	MenuItemOption,
 	MenuButton,
+	Stack,
+	Text
 } from '@chakra-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -48,19 +50,17 @@ const AddTodo = ({ selectedProject }) => {
 					Authorization: `bearer ${user.token}`
 				}
 			};
-			console.log(todo);
-			dispatch(addTodo({todo, config}));
+			dispatch(addTodo({ todo, config }));
 			formik.resetForm();
 		}
-  });
-  
-  console.log('rendering add todo', formik.values);
+	});
+
 	return (
-		<Box>
+		<Box marginBottom="1.5em">
 			<form onSubmit={formik.handleSubmit}>
 				<Flex borderRadius="5px" padding="0.5em 1em 1em 1em" flexDirection="column" border="1px solid #E2E8F0">
 					<Input
-            padding="0"
+						padding="0"
 						border="none"
 						name="task"
 						type="text"
@@ -71,77 +71,99 @@ const AddTodo = ({ selectedProject }) => {
 						width="100%"
 						marginBottom="0.4em"
 					/>
-					<Flex>
-						<Menu>
-							<MenuButton type="button">
-								<AiFillFlag
-									size={22}
-									color={
-										formik.values.priority === 1 ? (
-											'gray'
-										) : formik.values.priority === 2 ? (
-											'blue'
-										) : formik.values.priority === 3 ? (
-											'orange'
-										) : (
-											'red'
-										)
-									}
-								/>
-							</MenuButton>
-							<MenuList placement="bottom-start">
-								<MenuOptionGroup
-									value={formik.values.priority}
-									name="priority"
-									onChange={(value) => formik.setFieldValue('priority', value)}
-									title="Priority Level"
-									type="radio"
+					<Flex alignItems="center" justifyContent="space-between">
+						<Flex alignItems="center">
+							<Menu>
+								<MenuButton type="button">
+									<AiFillFlag
+										size={22}
+										color={
+											formik.values.priority === 1 ? (
+												'gray'
+											) : formik.values.priority === 2 ? (
+												'blue'
+											) : formik.values.priority === 3 ? (
+												'orange'
+											) : (
+												'red'
+											)
+										}
+									/>
+								</MenuButton>
+								<MenuList placement="bottom-start">
+									<MenuOptionGroup
+										value={formik.values.priority}
+										name="priority"
+										onChange={(value) => formik.setFieldValue('priority', value)}
+										title="Priority Level"
+										type="radio"
+									>
+										<MenuItemOption type="button" value={1}>
+											<Stack isInline>
+												<AiFillFlag size={20} color="gray" />
+												<Text>No Priority</Text>
+											</Stack>
+										</MenuItemOption>
+										<MenuItemOption type="button" value={2}>
+											<Stack isInline>
+												<AiFillFlag size={20} color="blue" />
+												<Text>Low Priority </Text>
+											</Stack>
+										</MenuItemOption>
+										<MenuItemOption type="button" value={3}>
+											<Stack isInline>
+												<AiFillFlag size={20} color="orange" />
+												<Text>Medium Priority</Text>
+											</Stack>
+										</MenuItemOption>
+										<MenuItemOption type="button" value={4}>
+											<Stack isInline>
+												<AiFillFlag size={20} color="red" />
+												<Text> High Priority</Text>
+											</Stack>
+										</MenuItemOption>
+									</MenuOptionGroup>
+								</MenuList>
+							</Menu>
+							<Menu>
+								<MenuButton
+									textTransform="capitalize"
+									type="button"
+									variant="outline"
+									as={Button}
+									marginLeft="1em"
 								>
-									<MenuItemOption type="button" value={1}>
-										<AiFillFlag size={20} color="gray" />
-									</MenuItemOption>
-									<MenuItemOption type="button" value={2}>
-										<AiFillFlag size={20} color="blue" />
-									</MenuItemOption>
-									<MenuItemOption type="button" value={3}>
-										<AiFillFlag size={20} color="orange" />
-									</MenuItemOption>
-									<MenuItemOption type="button" value={4}>
-										<AiFillFlag size={20} color="red" />
-									</MenuItemOption>
-								</MenuOptionGroup>
-							</MenuList>
-						</Menu>
-            <Menu>
-							<MenuButton type="button" as={Button}>
-								{projects.find(project => project.p_id === formik.values.p_id).name}
-							</MenuButton>
-							<MenuList placement="bottom-start">
-								<MenuOptionGroup
-									value={formik.values.p_id}
-									name="p_id"
-									onChange={(value) => formik.setFieldValue('p_id', value)}
-									title="Select Project"
-									type="radio"
-								>
-									{projects.map(project => {
-										return (
-											<MenuItemOption key={project.p_id} type="button" value={project.p_id}>
-												{project.name}
-											</MenuItemOption>
-										)
-									})}
-								</MenuOptionGroup>
-							</MenuList>
-						</Menu>
+									{projects.find((project) => project.p_id === formik.values.p_id).name}
+								</MenuButton>
+								<MenuList placement="bottom-start">
+									<MenuOptionGroup
+										value={formik.values.p_id}
+										name="p_id"
+										onChange={(value) => formik.setFieldValue('p_id', value)}
+										title="Select Project"
+										type="radio"
+									>
+										{projects.map((project) => {
+											return (
+												<MenuItemOption
+													key={project.p_id}
+													textTransform="capitalize"
+													type="button"
+													value={project.p_id}
+												>
+													{project.name}
+												</MenuItemOption>
+											);
+										})}
+									</MenuOptionGroup>
+								</MenuList>
+							</Menu>
+						</Flex>
+						<Button variantColor="purple" type="submit">
+							Add
+						</Button>
 					</Flex>
 				</Flex>
-
-				<Button
-					type="submit"
-				>
-					Add
-				</Button>
 			</form>
 		</Box>
 	);

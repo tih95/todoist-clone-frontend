@@ -21,9 +21,11 @@ const Header = () => {
 			display="flex"
 			justifyContent="space-between"
 			alignItems="center"
+			height="75px"
+			backgroundColor="#4A5568"
 		>
 			<Link to="/">
-				<Text fontSize="1.2em" fontWeight="bold">
+				<Text color="white" fontSize="1.2em" fontWeight="bold">
 					todoist
 				</Text>
 			</Link>
