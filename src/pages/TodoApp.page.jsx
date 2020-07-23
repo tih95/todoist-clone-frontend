@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect, lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
-import Project from '../pages/Project.page';
 
 import { fetchProjects } from '../features/projects/projectsSlice';
 import { selectUser } from '../features/user/userSlice';
 import { fetchTodos } from '../features/todos/todosSlice';
-import AllTodos from './AllTodos.page';
 import Sidebar from '../components/Sidebar.component';
+
+const Project = lazy(() => import('../pages/Project.page'));
+const AllTodos = lazy(() => import('../pages/AllTodos.page'));
 
 const TodoApp = ({ match }) => {
   const dispatch = useDispatch();
@@ -16,14 +16,14 @@ const TodoApp = ({ match }) => {
 
   useEffect(
 		() => {
+      console.log('running effect in TodoApp');
 			const setProjectsAndTodos = async () => {
 				const config = {
 					headers: {
 						Authorization: `bearer ${user.token}`
 					}
-				};
-				await dispatch(fetchProjects(config));
-				await dispatch(fetchTodos(config));
+        };
+        await Promise.all([dispatch(fetchProjects(config)), dispatch(fetchTodos(config))]);
 			};
 			setProjectsAndTodos();
 		},
@@ -32,10 +32,13 @@ const TodoApp = ({ match }) => {
   return (
     <div>
       <Sidebar />
-      <Switch>
-        <Route exact path={`${match.path}`} component={AllTodos} />
-        <Route exact path={`${match.path}/projects/:projectName`} component={Project} />
-      </Switch>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route exact path={`${match.path}`} component={AllTodos} />
+          <Route exact path={`${match.path}/projects/:projectName`} component={Project} />
+        </Switch>
+      </Suspense>
+      
     </div>
   )
 }

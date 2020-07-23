@@ -33,6 +33,16 @@ export const updateTodo = createAsyncThunk('todos/updateTodo', async ({editedTod
   }
 })
 
+export const sortTodos = createAsyncThunk('todos/sortTodos', async ({method, config}, { rejectWithValue}) => {
+  try {
+    const resp = await axios.get(`http://localhost:3001/api/todos?sort=${method}`, config);
+    return resp.data;
+  }
+  catch(e) {
+    return rejectWithValue(e.response.data);
+  }
+})
+
 const todosSlice = createSlice({
   name: 'todos',
   initialState: {
@@ -113,6 +123,30 @@ const todosSlice = createSlice({
       if (state.loading === 'loading') {
         state.loading = 'idle';
 
+        if (action.payload) {
+          state.error = action.payload.errMsg;
+        }
+        else {
+          state.error = action.error;
+        }
+      }
+    },
+    [sortTodos.pending]: (state, action) => {
+      if (state.loading === 'idle') {
+        state.loading = 'loading';
+      }
+    },
+    [sortTodos.fulfilled]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+        state.userTodos = action.payload;
+        state.error = null;
+      }
+    },
+    [sortTodos.rejected]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+        
         if (action.payload) {
           state.error = action.payload.errMsg;
         }

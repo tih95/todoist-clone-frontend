@@ -46,7 +46,8 @@ const AddProject = ({ isOpen, onClose }) => {
 			const resultAction = await dispatch(addProject({ values, config }));
 
 			if (addProject.fulfilled.match(resultAction)) {
-				toast.success(`Successfully create project ${resultAction.payload.name}`);
+        toast.success(`Successfully create project ${resultAction.payload.name}`);
+        formik.resetForm();
 				onClose();
 			}
 			else {

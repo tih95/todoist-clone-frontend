@@ -23,6 +23,16 @@ export const addProject = createAsyncThunk('projects/addProject', async ({ value
   }
 })
 
+export const deleteProject = createAsyncThunk('projects/deleteProject', async ({selectedProject, config}, { rejectWithValue }) => {
+  try {
+    const resp = await axios.delete(`http://localhost:3001/api/projects/${selectedProject.p_id}`, config);
+    return resp.data;
+  }
+  catch(e) {
+    return rejectWithValue(e.response.data);
+  }
+})
+
 const projectsSlice = createSlice({
 	name: 'projects',
 	initialState: {
@@ -82,6 +92,31 @@ const projectsSlice = createSlice({
         }
         else {
           console.log('got here');
+          state.error = action.error;
+        }
+      }
+    },
+    [deleteProject.pending]: (state, action) => {
+      if (state.loading === 'idle') {
+        state.loading = 'loading';
+      }
+    },
+    [deleteProject.fulfilled]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+        state.userProjects = state.userProjects.filter(project => project.p_id !== action.payload.p_id);
+        state.error = null;
+        state.selectedProject = state.userProjects.find(project => project.name === 'inbox');
+      }
+    },
+    [deleteProject.rejected]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+        
+        if (action.payload) {
+          state.error = action.payload.errMsg;
+        }
+        else {
           state.error = action.error;
         }
       }
