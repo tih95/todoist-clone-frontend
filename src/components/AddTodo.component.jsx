@@ -2,6 +2,7 @@ import React from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AiFillFlag } from 'react-icons/ai';
+import DatePicker from 'react-datepicker';
 import {
 	Box,
 	Input,
@@ -17,9 +18,12 @@ import {
 } from '@chakra-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
+import "react-datepicker/dist/react-datepicker.css";
+
 import { selectProjects } from '../features/projects/projectsSlice';
 import { selectUser } from '../features/user/userSlice';
 import { addTodo } from '../features/todos/todosSlice';
+import TodoDatePicker from './TodoDatePicker.component';
 
 const AddTodo = ({ selectedProject }) => {
 	const dispatch = useDispatch();
@@ -102,25 +106,25 @@ const AddTodo = ({ selectedProject }) => {
 										<MenuItemOption type="button" value={1}>
 											<Stack isInline>
 												<AiFillFlag size={20} color="gray" />
-												<Text>No Priority</Text>
+												<Text marginLeft="0.5em">No Priority</Text>
 											</Stack>
 										</MenuItemOption>
 										<MenuItemOption type="button" value={2}>
 											<Stack isInline>
 												<AiFillFlag size={20} color="blue" />
-												<Text>Low Priority </Text>
+												<Text marginLeft="0.5em">Low Priority </Text>
 											</Stack>
 										</MenuItemOption>
 										<MenuItemOption type="button" value={3}>
 											<Stack isInline>
 												<AiFillFlag size={20} color="orange" />
-												<Text>Medium Priority</Text>
+												<Text marginLeft="0.5em">Medium Priority</Text>
 											</Stack>
 										</MenuItemOption>
 										<MenuItemOption type="button" value={4}>
 											<Stack isInline>
 												<AiFillFlag size={20} color="red" />
-												<Text> High Priority</Text>
+												<Text marginLeft="0.5em"> High Priority</Text>
 											</Stack>
 										</MenuItemOption>
 									</MenuOptionGroup>
@@ -160,6 +164,11 @@ const AddTodo = ({ selectedProject }) => {
 									</MenuOptionGroup>
 								</MenuList>
 							</Menu>
+							<DatePicker 
+								customInput={<TodoDatePicker />}
+								selected={formik.values.due_date}
+								onChange={value => formik.setFieldValue('due_date', value)}
+							/>
 						</Flex>
 						<Button size="sm" variantColor="purple" type="submit">
 							Add

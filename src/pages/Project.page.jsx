@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import ReactHelmet from 'react-helmet';
 import { Text, Box, MenuButton, Flex, Menu, MenuItem, MenuList, MenuDivider, MenuGroup } from '@chakra-ui/core';
 import {
 	selectProjects,
@@ -14,13 +15,15 @@ import {
 	AiFillFlag,
 	RiCalendarCheckLine,
 	RiCheckboxLine,
-	RiCheckboxIndeterminateLine
+	RiCheckboxIndeterminateLine,
+	RiEdit2Line
 } from 'react-icons/all';
 import AddTodo from '../components/AddTodo.component';
 import TodoList from '../components/TodoList.component';
 
 import { selectAllTodos, sortTodos } from '../features/todos/todosSlice';
 import { selectUser } from '../features/user/userSlice';
+import EditProject from '../components/EditProject.component';
 
 const Project = ({ match, history }) => {
 	const dispatch = useDispatch();
@@ -29,6 +32,7 @@ const Project = ({ match, history }) => {
 	const projects = useSelector(selectProjects);
 	const user = useSelector(selectUser);
 	const [ showCompleted, setShowCompleted ] = useState(false);
+	const [ showEditModal, setShowEditModal ] = useState(false);
 
 	useEffect(
 		() => {
@@ -69,6 +73,10 @@ const Project = ({ match, history }) => {
 
 	return (
 		<Box padding="2em" marginLeft="230px">
+			<ReactHelmet>
+				<title>{selectedProject.name} | Todoist</title>
+			</ReactHelmet>
+			<EditProject isOpen={showEditModal} onClose={() => setShowEditModal(!showEditModal)} />
 			<Flex justifyContent="space-between" alignItems="center" marginBottom="1em">
 				<Text textTransform="capitalize" fontWeight="bold" fontSize="1.4em">
 					{selectedProject.name}
@@ -78,6 +86,13 @@ const Project = ({ match, history }) => {
 						<RiMoreLine size={24} />
 					</MenuButton>
 					<MenuList>
+						<MenuItem onClick={() => setShowEditModal(!showEditModal)} isDisabled={selectedProject.name === 'inbox'}>
+							<RiEdit2Line />
+							<Box as="span" marginLeft="1em">
+								Edit Project
+							</Box>
+						</MenuItem>
+						<MenuDivider />
 						<MenuGroup>
 							<MenuItem onClick={() => handleSort('name')}>
 								<TiSortAlphabetically />
@@ -107,14 +122,12 @@ const Project = ({ match, history }) => {
 							</Box>
 						</MenuItem>
 						<MenuDivider />
-						{selectedProject.name === 'inbox' ? null : (
-							<MenuItem onClick={handleDelete}>
-								<RiDeleteBin6Line />
-								<Box as="span" marginLeft="1em">
-									Delete Project
-								</Box>
-							</MenuItem>
-						)}
+						<MenuItem isDisabled={selectedProject.name === 'inbox'} onClick={handleDelete}>
+							<RiDeleteBin6Line />
+							<Box as="span" marginLeft="1em">
+								Delete Project
+							</Box>
+						</MenuItem>
 					</MenuList>
 				</Menu>
 			</Flex>
@@ -122,7 +135,7 @@ const Project = ({ match, history }) => {
 			<AddTodo selectedProject={selectedProject} />
 
 			<Box>
-				{notCompletedTodos.length === 0 ? (
+				{notCompletedTodos.length === 0 && !showCompleted ? (
 					<Text width="100%" marginTop="50px" textAlign="center">
 						Why don't you add a todo to get started?
 					</Text>

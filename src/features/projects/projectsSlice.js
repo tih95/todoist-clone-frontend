@@ -33,6 +33,16 @@ export const deleteProject = createAsyncThunk('projects/deleteProject', async ({
   }
 })
 
+export const editProject = createAsyncThunk('projects/editProject', async ({ editedProject, config }, { rejectWithValue }) => {
+  try {
+    const resp = await axios.put(`http://localhost:3001/api/projects/${editedProject.p_id}`, editedProject, config);
+    return resp.data;
+  }
+  catch(e) {
+    return rejectWithValue(e.response.data);
+  }
+})
+
 const projectsSlice = createSlice({
 	name: 'projects',
 	initialState: {
@@ -120,7 +130,34 @@ const projectsSlice = createSlice({
           state.error = action.error;
         }
       }
-    }
+    },
+    [editProject.pending]: (state, action) => {
+      if (state.loading === 'idle') {
+        state.loading = 'loading';
+      }
+    },
+    [editProject.fulfilled]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+
+        const foundIndex = state.userProjects.findIndex(project => project.p_id === action.payload.p_id);
+
+        state.userProjects[foundIndex] = action.payload; 
+        state.error = null;
+      }
+    },
+    [editProject.rejected]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+
+        if (action.payload) {
+          state.error = action.payload.errMsg;
+        }
+        else {
+          state.error = action.error;
+        }
+      }
+    },
 	}
 });
 
