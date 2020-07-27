@@ -127,8 +127,7 @@ const Register = ({ history }) => {
 					loadingText="Registering..."
 					width="100%"
 					type="submit"
-					backgroundColor="#6246ea"
-					_hover={{ backgroundColor: '#806aef' }}
+					variantColor="purple"
 					color="#fffffe"
 				>
 					Register

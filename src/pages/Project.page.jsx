@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactHelmet from 'react-helmet';
-import { Text, Box, MenuButton, Flex, Menu, MenuItem, MenuList, MenuDivider, MenuGroup } from '@chakra-ui/core';
+import { useMediaQuery } from 'react-responsive';
+import { Text, Box, MenuButton, Flex, Menu, MenuItem, MenuList, MenuDivider, MenuGroup, Spinner } from '@chakra-ui/core';
 import {
 	selectProjects,
 	selectSelectedProject,
@@ -18,7 +19,7 @@ import {
 	RiCheckboxIndeterminateLine,
 	RiEdit2Line
 } from 'react-icons/all';
-import AddTodo from '../components/AddTodo.component';
+import TodoForm from '../components/TodoForm.component';
 import TodoList from '../components/TodoList.component';
 
 import { selectAllTodos, sortTodos } from '../features/todos/todosSlice';
@@ -26,7 +27,9 @@ import { selectUser } from '../features/user/userSlice';
 import EditProject from '../components/EditProject.component';
 
 const Project = ({ match, history }) => {
+	const shouldShrink = useMediaQuery({ query: '(max-width: 750px)' });
 	const dispatch = useDispatch();
+
 	const selectedProject = useSelector(selectSelectedProject);
 	const todos = useSelector(selectAllTodos);
 	const projects = useSelector(selectProjects);
@@ -70,9 +73,9 @@ const Project = ({ match, history }) => {
 	const projectTodos = todos.filter((todo) => todo.p_id === selectedProject.p_id);
 	const notCompletedTodos = projectTodos.filter((todo) => !todo.completed);
 	const completedTodos = projectTodos.filter((todo) => todo.completed);
-
+	
 	return (
-		<Box padding="2em" marginLeft="230px">
+		<Box padding="2em" marginLeft={!shouldShrink ? '230px' : ''}>
 			<ReactHelmet>
 				<title>{selectedProject.name} | Todoist</title>
 			</ReactHelmet>
@@ -132,12 +135,12 @@ const Project = ({ match, history }) => {
 				</Menu>
 			</Flex>
 
-			<AddTodo selectedProject={selectedProject} />
+			<TodoForm selectedProject={selectedProject} />
 
 			<Box>
 				{notCompletedTodos.length === 0 && !showCompleted ? (
-					<Text width="100%" marginTop="50px" textAlign="center">
-						Why don't you add a todo to get started?
+					<Text width="100%" marginTop="50px" fontWeight="500" textAlign="center">
+						What Will You Accomplish Today?
 					</Text>
 				) : (
 					<React.Fragment>

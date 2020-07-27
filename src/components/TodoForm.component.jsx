@@ -14,28 +14,30 @@ import {
 	MenuItemOption,
 	MenuButton,
 	Stack,
-	Text
+	Text,
+	ButtonGroup
 } from '@chakra-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { selectProjects } from '../features/projects/projectsSlice';
 import { selectUser } from '../features/user/userSlice';
-import { addTodo } from '../features/todos/todosSlice';
+import { addTodo, updateTodo } from '../features/todos/todosSlice';
 import TodoDatePicker from './TodoDatePicker.component';
+import { BsCircleFill } from 'react-icons/bs';
 
-const AddTodo = ({ selectedProject }) => {
+const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 	const dispatch = useDispatch();
 	const projects = useSelector(selectProjects);
 	const user = useSelector(selectUser);
 
 	const formik = useFormik({
 		initialValues: {
-			task: '',
-			priority: 1,
-			due_date: null,
-			p_id: selectedProject.p_id
+			task: isEditing ? todo.task : '',
+			priority: isEditing ? todo.priority : 1,
+			due_date: isEditing ? todo.due_date : null,
+			p_id: isEditing ? todo.p_id : selectedProject.p_id
 		},
 		validationSchema: Yup.object({
 			task: Yup.string().required('Must write todo'),
@@ -45,17 +47,28 @@ const AddTodo = ({ selectedProject }) => {
 		}),
 		enableReinitialize: true,
 		onSubmit: async (values) => {
-			const todo = {
-				...values
-			};
-
 			const config = {
 				headers: {
 					Authorization: `bearer ${user.token}`
 				}
 			};
-			dispatch(addTodo({ todo, config }));
-			formik.resetForm();
+
+			if (isEditing) {
+				const editedTodo = {
+					...values,
+					completed: false,
+					t_id: todo.t_id
+				}
+				await dispatch(updateTodo({ editedTodo, config }));
+				cancelEdit();
+			}
+			else {
+				const todo = {
+					...values,
+				};
+				await dispatch(addTodo({ todo, config }));
+				formik.resetForm();
+			}
 		}
 	});
 
@@ -76,7 +89,7 @@ const AddTodo = ({ selectedProject }) => {
 						width="100%"
 						marginBottom="0.4em"
 					/>
-					<Flex alignItems="center" justifyContent="space-between">
+					<Flex flexWrap="wrap" alignItems="center" justifyContent="space-between">
 						<Flex alignItems="center">
 							<Menu>
 								<MenuButton type="button">
@@ -139,6 +152,8 @@ const AddTodo = ({ selectedProject }) => {
 									size="sm"
 									marginLeft="1em"
 								>
+									<Box marginRight="0.6em" fontSize="8px" as={BsCircleFill} color={projects.find((project) => project.p_id === formik.values.p_id).color} />
+							
 									{projects.find((project) => project.p_id === formik.values.p_id).name}
 								</MenuButton>
 								<MenuList placement="bottom-start">
@@ -157,22 +172,33 @@ const AddTodo = ({ selectedProject }) => {
 													type="button"
 													value={project.p_id}
 												>
-													{project.name}
+													<Stack isInline alignItems="center">
+														<BsCircleFill size={12} color={project.color} />
+														<Text marginLeft="1em">{project.name}</Text>
+													</Stack>
 												</MenuItemOption>
+
 											);
 										})}
 									</MenuOptionGroup>
 								</MenuList>
 							</Menu>
-							<DatePicker 
+							<DatePicker
 								customInput={<TodoDatePicker />}
-								selected={formik.values.due_date}
-								onChange={value => formik.setFieldValue('due_date', value)}
+								selected={(formik.values.due_date && new Date(formik.values.due_date)) || null}
+								onChange={(value) => formik.setFieldValue('due_date', value)}
 							/>
 						</Flex>
-						<Button size="sm" variantColor="purple" type="submit">
-							Add
-						</Button>
+						<ButtonGroup>
+							<Button isDisabled={!formik.values.task} size="sm" variantColor="purple" type="submit">
+								{isEditing ? 'Save' : 'Add'}
+							</Button>
+							{isEditing ? (
+								<Button size="sm" type="button" onClick={cancelEdit}>
+									Cancel
+								</Button>
+							) : null}
+						</ButtonGroup>
 					</Flex>
 				</Flex>
 			</form>
@@ -180,4 +206,4 @@ const AddTodo = ({ selectedProject }) => {
 	);
 };
 
-export default AddTodo;
+export default TodoForm;

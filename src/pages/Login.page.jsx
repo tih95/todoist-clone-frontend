@@ -97,8 +97,7 @@ const Login = ({ history }) => {
 				</FormControl>
 
 				<Button
-					backgroundColor="#6246ea"
-					_hover={{ backgroundColor: '#806aef' }}
+					variantColor="purple"
 					isLoading={loadingStatus === 'loading'}
 					loadingText="Logging In..."
 					type="submit"

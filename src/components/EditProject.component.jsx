@@ -21,7 +21,7 @@ import { BsCircleFill } from 'react-icons/bs';
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectSelectedProject, editProject, setSelectedProject } from '../features/projects/projectsSlice';
+import { selectSelectedProject, editProject } from '../features/projects/projectsSlice';
 
 import colors from '../utils/colors';
 import { selectUser } from '../features/user/userSlice';
@@ -38,7 +38,8 @@ const EditProject = ({ isOpen, onClose }) => {
 		validationSchema: Yup.object({
 			name: Yup.string().required('Must have a name'),
 			color: Yup.string().required('Must choose a color')
-		}),
+    }),
+    enableReinitialize: true,
 		onSubmit: async (values) => {
       const config = {
         headers: {
@@ -59,7 +60,7 @@ const EditProject = ({ isOpen, onClose }) => {
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Add New Project</ModalHeader>
+				<ModalHeader>Edit Project</ModalHeader>
 				<form onSubmit={formik.handleSubmit}>
 					<ModalBody>
 						<FormControl>

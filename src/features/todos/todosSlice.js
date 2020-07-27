@@ -33,6 +33,16 @@ export const updateTodo = createAsyncThunk('todos/updateTodo', async ({editedTod
   }
 })
 
+export const deleteTodo = createAsyncThunk('todos/deleteTodo', async ({todo, config}, { rejectWithValue }) => {
+  try {
+    const resp = await axios.delete(`http://localhost:3001/api/todos/${todo.t_id}`, config);
+    return resp.data;
+  }
+  catch(e) {
+    return rejectWithValue(e.response.data);
+  }
+})
+
 export const sortTodos = createAsyncThunk('todos/sortTodos', async ({method, config}, { rejectWithValue}) => {
   try {
     const resp = await axios.get(`http://localhost:3001/api/todos?sort=${method}`, config);
@@ -144,6 +154,30 @@ const todosSlice = createSlice({
       }
     },
     [sortTodos.rejected]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+        
+        if (action.payload) {
+          state.error = action.payload.errMsg;
+        }
+        else {
+          state.error = action.error;
+        }
+      }
+    },
+    [deleteTodo.pending]: (state, action) => {
+      if (state.loading === 'idle') {
+        state.loading = 'loading';
+      }
+    },
+    [deleteTodo.fulfilled]: (state, action) => {
+      if (state.loading === 'loading') {
+        state.loading = 'idle';
+        state.userTodos = state.userTodos.filter(todo => todo.t_id !== action.payload.t_id);
+        state.error = null;
+      }
+    },
+    [deleteTodo.rejected]: (state, action) => {
       if (state.loading === 'loading') {
         state.loading = 'idle';
         
