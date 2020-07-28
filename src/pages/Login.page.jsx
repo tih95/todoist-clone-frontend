@@ -40,6 +40,7 @@ const Login = ({ history }) => {
 				history.push('/');
 			}
 			else {
+				console.log('got here');
 				toast.error(resultAction.payload.errMsg);
 			}
 		}

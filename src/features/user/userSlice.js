@@ -5,11 +5,13 @@ import { loginUserApi, registerUserApi } from '../../api/users';
 /* THUNKS */
 export const loginUser = createAsyncThunk('user/loginUser', async (user, { rejectWithValue }) => {
 	try {
+		console.log('requesting')
 		const resp = await loginUserApi(user);
 
 		return resp.data;
 	} 
 	catch (err) {
+		console.log('rejecting');
 		return rejectWithValue(err.response.data);
 	}
 });

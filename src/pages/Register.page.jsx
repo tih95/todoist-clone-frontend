@@ -47,6 +47,8 @@ const Register = ({ history }) => {
 		}
 	});
 
+	console.log('register page');
+
 	return (
 		<Box margin="0 auto" maxW="700px" padding="1.5em" color="#2b2c34" backgroundColor="#fffffe">
 			<form onSubmit={formik.handleSubmit}>

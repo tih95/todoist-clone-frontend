@@ -55,20 +55,20 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 					...values,
 					completed: false,
 					t_id: todo.t_id
-				}
+				};
 				await dispatch(updateTodo({ editedTodo, config }));
 				cancelEdit();
 			}
 			else {
 				const todo = {
-					...values,
+					...values
 				};
 				await dispatch(addTodo({ todo, config }));
 				formik.resetForm();
 			}
 		}
 	});
-
+	
 	return (
 		<Box marginBottom="1.5em">
 			<form onSubmit={formik.handleSubmit}>
@@ -149,9 +149,14 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 									size="sm"
 									marginLeft="1em"
 								>
-									<Box marginRight="0.6em" fontSize="8px" as={BsCircleFill} color={projects.find((project) => project.p_id === formik.values.p_id).color} />
-							
-									{projects.find((project) => project.p_id === formik.values.p_id).name}
+									<Box
+										marginRight="0.6em"
+										fontSize="8px"
+										as={BsCircleFill}
+										color={isEditing ? projects.find((project) => project.p_id === formik.values.p_id).color : selectedProject.color}
+									/>
+
+									{isEditing ? projects.find((project) => project.p_id === formik.values.p_id).name : selectedProject.name}
 								</MenuButton>
 								<MenuList placement="bottom-start">
 									<MenuOptionGroup
@@ -174,7 +179,6 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 														<Text marginLeft="1em">{project.name}</Text>
 													</Stack>
 												</MenuItemOption>
-
 											);
 										})}
 									</MenuOptionGroup>

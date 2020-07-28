@@ -20,7 +20,7 @@ const SidebarProjectItem = ({ project }) => {
 		<Box fontSize="1.1em" padding="0.2em 0">
 			<Link to={`/app/projects/${project.name}`}>
 				<Stack isInline alignItems="center">
-					{project.color === 'inbox' ? (
+					{project.name === 'inbox' ? (
 						<RiInboxLine size={18} />
 					) : (
 						<BsCircleFill size={10} color={project.color} />
