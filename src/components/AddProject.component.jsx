@@ -9,8 +9,8 @@ import {
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
-  ModalBody,
-  ModalFooter,
+	ModalBody,
+	ModalFooter,
 	Button,
 	Input,
 	FormLabel,
@@ -18,7 +18,8 @@ import {
 	MenuOptionGroup,
 	MenuItemOption,
 	MenuList,
-	MenuButton, FormControl
+	MenuButton,
+	FormControl
 } from '@chakra-ui/core';
 
 import { addProject } from '../features/projects/projectsSlice';
@@ -46,8 +47,8 @@ const AddProject = ({ isOpen, onClose }) => {
 			const resultAction = await dispatch(addProject({ values, config }));
 
 			if (addProject.fulfilled.match(resultAction)) {
-        toast.success(`Successfully create project ${resultAction.payload.name}`);
-        formik.resetForm();
+				toast.success(`Successfully create project ${resultAction.payload.name}`);
+				formik.resetForm();
 				onClose();
 			}
 			else {
@@ -61,58 +62,58 @@ const AddProject = ({ isOpen, onClose }) => {
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>Add New Project</ModalHeader>
-        <form onSubmit={formik.handleSubmit}>
-          <ModalBody>
-            <FormControl>
-              <FormLabel htmlFor="name">Project Name</FormLabel>
-              <Input
-                type="text"
-                name="name"
-                id="name"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Choose a color</FormLabel>
-              <Menu>
-                <MenuButton marginTop="1em" as={Button} variant="outline">
-                  <BsCircleFill color={formik.values.color} />
-                </MenuButton>
-                <MenuList maxHeight="300px" width="75px" overflowY="scroll">
-                  <MenuOptionGroup
-                    value={formik.values.color}
-                    name="color"
-                    onChange={(value) => formik.setFieldValue('color', value)}
-                    type="radio"
-                    title="Color"
-                    defaultValue={"#4A5568"}
-                  >
-                    {colors.map((color) => (
-                      <MenuItemOption value={color} key={color}>
-                        <BsCircleFill color={color} />
-                      </MenuItemOption>
-                    ))}
-                  </MenuOptionGroup>
-                </MenuList>
-              </Menu>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button
-              color="white"
-              backgroundColor="#6246ea"
-              _hover={{ backgroundColor: '#806aef' }}
-              type="submit"
-            >
-              Add Project
-            </Button>
-          </ModalFooter>
-        </form>
+				<form onSubmit={formik.handleSubmit}>
+					<ModalBody>
+						<FormControl>
+							<FormLabel htmlFor="name">Project Name</FormLabel>
+							<Input
+								type="text"
+								name="name"
+								id="name"
+								value={formik.values.name}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+						</FormControl>
+						<FormControl>
+							<FormLabel>Choose a color</FormLabel>
+							<Menu>
+								<MenuButton marginTop="1em" as={Button} variant="outline">
+									<BsCircleFill color={formik.values.color} />
+								</MenuButton>
+								<MenuList maxHeight="300px" width="75px" overflowY="scroll">
+									<MenuOptionGroup
+										value={formik.values.color}
+										name="color"
+										onChange={(value) => formik.setFieldValue('color', value)}
+										type="radio"
+										title="Color"
+										defaultValue={'#4A5568'}
+									>
+										{colors.map((color) => (
+											<MenuItemOption value={color} key={color}>
+												<BsCircleFill color={color} />
+											</MenuItemOption>
+										))}
+									</MenuOptionGroup>
+								</MenuList>
+							</Menu>
+						</FormControl>
+					</ModalBody>
+					<ModalFooter>
+						<Button mr={3} onClick={onClose}>
+							Close
+						</Button>
+						<Button
+							color="white"
+							backgroundColor="#6246ea"
+							_hover={{ backgroundColor: '#806aef' }}
+							type="submit"
+						>
+							Add Project
+						</Button>
+					</ModalFooter>
+				</form>
 			</ModalContent>
 		</Modal>
 	);

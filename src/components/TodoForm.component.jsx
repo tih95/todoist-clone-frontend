@@ -2,7 +2,9 @@ import React from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AiFillFlag } from 'react-icons/ai';
+import { BsCircleFill } from 'react-icons/bs';
 import DatePicker from 'react-datepicker';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	Box,
 	Input,
@@ -17,7 +19,6 @@ import {
 	Text,
 	ButtonGroup
 } from '@chakra-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -25,7 +26,7 @@ import { selectProjects } from '../features/projects/projectsSlice';
 import { selectUser } from '../features/user/userSlice';
 import { addTodo, updateTodo } from '../features/todos/todosSlice';
 import TodoDatePicker from './TodoDatePicker.component';
-import { BsCircleFill } from 'react-icons/bs';
+import { createConfig } from '../utils/config';
 
 const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 	const dispatch = useDispatch();
@@ -47,11 +48,7 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 		}),
 		enableReinitialize: true,
 		onSubmit: async (values) => {
-			const config = {
-				headers: {
-					Authorization: `bearer ${user.token}`
-				}
-			};
+			const config = createConfig(user);
 
 			if (isEditing) {
 				const editedTodo = {

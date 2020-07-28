@@ -19,9 +19,10 @@ import {
 import { registerUser } from '../features/user/userSlice';
 
 const Register = ({ history }) => {
-	const [ showPassword, setShowPassword ] = useState(false);
-	const loadingStatus = useSelector((state) => state.user.loading);
 	const dispatch = useDispatch();
+	const loadingStatus = useSelector((state) => state.user.loading);
+
+	const [ showPassword, setShowPassword ] = useState(false);
 	const formik = useFormik({
 		initialValues: {
 			name: '',

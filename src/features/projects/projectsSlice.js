@@ -1,45 +1,47 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+
+import { addProjectApi, deleteProjectApi, editProjectApi, fetchProjectsApi } from '../../api/projects';
 
 export const fetchProjects = createAsyncThunk('projects/fetchProjects', async (config, { rejectWithValue }) => {
   try {
-    const res = await axios.get('http://localhost:3001/api/projects', config);
-    return res.data;
+    const resp = await fetchProjectsApi(config);
+    return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 });
 
 export const addProject = createAsyncThunk('projects/addProject', async ({ values, config }, { rejectWithValue }) => {
-
   try {
-    const resp = await axios.post('http://localhost:3001/api/projects', values, config);
+    const resp = await addProjectApi(values, config);
 
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 
 export const deleteProject = createAsyncThunk('projects/deleteProject', async ({selectedProject, config}, { rejectWithValue }) => {
   try {
-    const resp = await axios.delete(`http://localhost:3001/api/projects/${selectedProject.p_id}`, config);
+    const resp = await deleteProjectApi(selectedProject, config);
+
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 
 export const editProject = createAsyncThunk('projects/editProject', async ({ editedProject, config }, { rejectWithValue }) => {
   try {
-    const resp = await axios.put(`http://localhost:3001/api/projects/${editedProject.p_id}`, editedProject, config);
+    const resp = await editProjectApi(editedProject, config);
+
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 
@@ -90,9 +92,7 @@ const projectsSlice = createSlice({
         state.loading = 'idle';
         state.userProjects = state.userProjects.concat(action.payload);
         state.error = null;
-        
       }
-      
     },
     [addProject.rejected]: (state, action) => {
       if (state.loading === 'loading') {
@@ -163,7 +163,6 @@ const projectsSlice = createSlice({
 
 // ACTIONS
 export const { setSelectedProject } = projectsSlice.actions;
-
 
 // SELECTOR
 export const selectProjects = state => state.projects.userProjects;

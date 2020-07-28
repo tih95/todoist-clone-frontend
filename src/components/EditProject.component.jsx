@@ -1,5 +1,8 @@
 import React from 'react';
 import * as Yup from 'yup';
+import { BsCircleFill } from 'react-icons/bs';
+import { useFormik } from 'formik';
+import { useSelector, useDispatch } from 'react-redux';
 import {
 	Modal,
 	ModalOverlay,
@@ -17,14 +20,12 @@ import {
 	MenuButton,
 	FormControl
 } from '@chakra-ui/core';
-import { BsCircleFill } from 'react-icons/bs';
-import { useFormik } from 'formik';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { selectSelectedProject, editProject } from '../features/projects/projectsSlice';
 
 import colors from '../utils/colors';
 import { selectUser } from '../features/user/userSlice';
+import { createConfig } from '../utils/config';
 
 const EditProject = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -41,16 +42,12 @@ const EditProject = ({ isOpen, onClose }) => {
     }),
     enableReinitialize: true,
 		onSubmit: async (values) => {
-      const config = {
-        headers: {
-          Authorization: `bearer ${user.token}`
-        }
-      }
+			const config = createConfig(user);
+			
       const editedProject = {
         ...values,
         p_id: selectedProject.p_id
       }
-     // console.log(editedProject)
       await dispatch(editProject({editedProject, config}));
       formik.resetForm();
       onClose();
@@ -104,12 +101,10 @@ const EditProject = ({ isOpen, onClose }) => {
 							Close
 						</Button>
 						<Button
-							color="white"
-							backgroundColor="#6246ea"
-							_hover={{ backgroundColor: '#806aef' }}
+							variantColor="purple"
 							type="submit"
 						>
-							Add Project
+							Save changes
 						</Button>
 					</ModalFooter>
 				</form>

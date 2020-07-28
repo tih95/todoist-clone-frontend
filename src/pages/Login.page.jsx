@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { loginUser } from '../features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { RiLockPasswordLine, RiEyeLine, RiEyeOffLine, RiMailLine } from 'react-icons/ri';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 import {
 	Box,
 	Input,
@@ -15,12 +15,14 @@ import {
 	InputGroup,
 	InputRightElement
 } from '@chakra-ui/core';
-import { toast } from 'react-toastify';
+
+import { loginUser } from '../features/user/userSlice';
 
 const Login = ({ history }) => {
-	const [ showPassword, setShowPassword ] = useState(false);
-	const loadingStatus = useSelector((state) => state.user.loading);
 	const dispatch = useDispatch();
+	const loadingStatus = useSelector((state) => state.user.loading);
+	
+	const [ showPassword, setShowPassword ] = useState(false);
 	const formik = useFormik({
 		initialValues: {
 			email: '',

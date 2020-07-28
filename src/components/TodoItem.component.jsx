@@ -8,10 +8,12 @@ import { updateTodo, deleteTodo } from '../features/todos/todosSlice';
 import { selectUser } from '../features/user/userSlice';
 import TodoItemMenu from './TodoItemMenu.component';
 import TodoForm from './TodoForm.component';
+import { createConfig } from '../utils/config';
 
 const TodoItem = ({ todo }) => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
+
 	const [ isCheckBoxHover, setIsCheckBoxHover ] = useState(false);
 	const [ isTodoHover, setIsTodoHover ] = useState(false);
 	const [ isEditing, setIsEditing ] = useState(false);
@@ -32,48 +34,40 @@ const TodoItem = ({ todo }) => {
 	};
 
 	const handleCheck = async () => {
-		const config = {
-			headers: {
-				Authorization: `bearer ${user.token}`
-			}
-		};
+		const config = createConfig(user);
+
 		const editedTodo = {
 			...todo,
 			completed: !todo.completed
 		};
-		console.log(editedTodo);
+
 		await dispatch(updateTodo({ editedTodo, config }));
 	};
 
 	const handleDelete = async () => {
-		const config = {
-			headers: {
-				Authorization: `bearer ${user.token}`
-			}
-		};
+		const config = createConfig(user);
 
 		await dispatch(deleteTodo({ todo, config }));
 	};
 
+	const handleEdit = async () => {
+		setIsEditing(true);
+		setIsTodoHover(false);
+	};
+
 	if (isEditing) {
 		return <TodoForm cancelEdit={() => setIsEditing(false)} isEditing={true} todo={todo} />;
-  }
-  
-  const handleEdit = async () => {
-    setIsEditing(true);
-    setIsTodoHover(false);
-  }
+	}
 
 	return (
 		<Flex
 			justifyContent="space-between"
 			onMouseEnter={() => setIsTodoHover(true)}
 			onMouseLeave={() => setIsTodoHover(false)}
-			cursor="pointer"
 			alignItems="center"
 			marginBottom="0.7em"
 		>
-			<Flex alignItems="center" color={todo.completed ? '#A0AEC0' : chooseColor()}>
+			<Flex cursor="pointer" alignItems="center" color={todo.completed ? '#A0AEC0' : chooseColor()}>
 				{todo.completed ? (
 					<RiCheckboxCircleLine onClick={handleCheck} size={22} />
 				) : (
@@ -85,7 +79,6 @@ const TodoItem = ({ todo }) => {
 						size="22px"
 					/>
 				)}
-
 				<Box marginLeft="1em">
 					<Text textDecor={todo.completed ? 'line-through' : ''}>{todo.task}</Text>
 					{!todo.due_date ? null : (
@@ -99,7 +92,9 @@ const TodoItem = ({ todo }) => {
 				</Box>
 			</Flex>
 
-			{isTodoHover ? <TodoItemMenu editTodo={handleEdit} deleteTodo={handleDelete} /> : null}
+			{isTodoHover ? (
+				<TodoItemMenu disabled={todo.completed} editTodo={handleEdit} deleteTodo={handleDelete} />
+			) : null}
 		</Flex>
 	);
 };

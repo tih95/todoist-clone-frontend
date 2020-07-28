@@ -23,6 +23,7 @@ const Header = () => {
 	const isShrink = useMediaQuery({ query: '(max-width: 750px)' });
 	const user = useSelector(selectUser);
 	const dispatch = useDispatch();
+	
 	const [ isDrawerOpen, setIsDrawerOpen ] = useState(false);
 
 	const handleLogout = () => {
@@ -73,11 +74,7 @@ const Header = () => {
 			) : (
 				<Box>
 					<Link to="/register">
-						<Button
-							size="sm"
-							variantColor="purple"
-							color="#fffffe"
-						>
+						<Button size="sm" variantColor="purple" color="#fffffe">
 							Register
 						</Button>
 					</Link>

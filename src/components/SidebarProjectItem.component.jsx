@@ -4,6 +4,7 @@ import { Box, Text, Stack } from '@chakra-ui/core';
 import { BsCircleFill } from 'react-icons/bs';
 import { RiInboxLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+
 import { selectAllTodos } from '../features/todos/todosSlice';
 
 const SidebarProjectItem = ({ project }) => {
@@ -13,7 +14,7 @@ const SidebarProjectItem = ({ project }) => {
 		return null;
 	}
 
-	const todoCount = todos.filter(todo => todo.p_id === project.p_id && !todo.completed).length;
+	const todoCount = todos.filter((todo) => todo.p_id === project.p_id && !todo.completed).length;
 
 	return (
 		<Box fontSize="1.1em" padding="0.2em 0">
@@ -28,7 +29,9 @@ const SidebarProjectItem = ({ project }) => {
 					<Text marginLeft="0.5em" cursor="pointer" textTransform="capitalize">
 						{project.name}
 					</Text>
-					<Text color="#A0AEC0" fontSize="0.8em">{todoCount}</Text>
+					<Text color="#A0AEC0" fontSize="0.8em">
+						{todoCount}
+					</Text>
 				</Stack>
 			</Link>
 		</Box>

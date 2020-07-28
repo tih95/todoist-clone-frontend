@@ -1,55 +1,55 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { addTodoApi, deleteTodoApi, fetchTodosApi, sortTodosApi, updateTodoApi } from '../../api/todos';
 
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async (config, { rejectWithValue }) => {
   try {
-    const resp = await axios.get('http://localhost:3001/api/todos', config);
+    const resp = await fetchTodosApi(config);
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 
 export const addTodo = createAsyncThunk('todos/addTodo', async ({todo, config}, { rejectWithValue }) => {
   try {
-    const resp = await axios.post('http://localhost:3001/api/todos', todo, config);
+    const resp = await addTodoApi(todo, config);
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 
 export const updateTodo = createAsyncThunk('todos/updateTodo', async ({editedTodo, config}, { rejectWithValue }) => {
-  console.log('editedTodo', editedTodo)
   try {
-    const resp = await axios.put(`http://localhost:3001/api/todos/${editedTodo.t_id}`, editedTodo, config);
-    console.log(resp);
+    const resp = await updateTodoApi(editedTodo, config);
+
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 
 export const deleteTodo = createAsyncThunk('todos/deleteTodo', async ({todo, config}, { rejectWithValue }) => {
   try {
-    const resp = await axios.delete(`http://localhost:3001/api/todos/${todo.t_id}`, config);
+    const resp = await deleteTodoApi(todo, config);
+    
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 
 export const sortTodos = createAsyncThunk('todos/sortTodos', async ({method, config}, { rejectWithValue}) => {
   try {
-    const resp = await axios.get(`http://localhost:3001/api/todos?sort=${method}`, config);
+    const resp = await sortTodosApi(method, config);
     return resp.data;
   }
-  catch(e) {
-    return rejectWithValue(e.response.data);
+  catch(err) {
+    return rejectWithValue(err.response.data);
   }
 })
 

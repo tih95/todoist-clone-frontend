@@ -12,7 +12,7 @@ const Landing = () => {
 
 	return (
 		<Box>
-			<Flex marginTop="2em" flexDir="column" alignItems="center" as="section">
+			<Flex marginTop="2em" flexDir="column" alignItems="center" as="section" padding="1em">
 				<Heading textAlign="center" as="h1" fontSize="4em" marginBottom="0.7em">
 					Organize it with Todoist
 				</Heading>
@@ -34,17 +34,23 @@ const Landing = () => {
 					width="70%"
 				/>
 
-				<Box>
-					<Text marginTop="1em" fontSize="4em" fontWeight="600">
+				<Box padding="1em">
+					<Text margin="1em 0" fontSize={isMobile ? '3em' : '4em'} fontWeight="600" lineHeight={1}>
 						Free Up Mental Space
 					</Text>
-					<Text fontSize="1.2em">Regain clarity and calmness by listing out your todos</Text>
+					<Text fontSize="1.4em">Regain clarity and calmness by listing out your todos</Text>
 				</Box>
 			</Flex>
 
-			<Flex flexDir={isMobile ? 'column' : 'row'} padding="0 2em" as="section" marginTop="3em" marginBottom="4em">
+			<Flex
+				flexDir={isMobile ? 'column' : 'row'}
+				padding={isMobile ? '0 1em' : '0 2em'}
+				as="section"
+				marginTop="3em"
+				marginBottom="4em"
+			>
 				<Flex flexDir="column" width={isMobile ? '100%' : '50%'}>
-					<Text fontSize="3em" fontWeight="bold">
+					<Text fontSize={isMobile ? '2em' : '3em'} fontWeight="bold">
 						A task manager you can trust for life
 					</Text>
 					<Text marginTop="1.3em" fontSize="1.4em">
@@ -59,19 +65,21 @@ const Landing = () => {
 				<Image width={isMobile ? '100%' : '45%'} height="auto" src={FeatureImage1} alt="feature 1" />
 			</Flex>
 
-			<Box
-				fontSize="18px"
+			<Flex
 				fontWeight="bold"
-				paddingTop="1em"
 				textAlign="center"
 				as="footer"
 				width="100%"
-				height="100px"
+				padding="1em"
 				backgroundColor="#CBD5E0"
+				flexDir="column"
 			>
-				<Text>Made by Tristan Honda</Text>
-				<Text>Built with React/Redux, Node/Express, Postgres, ChakraUI</Text>
-			</Box>
+				<Text marginBottom="0.6em" fontSize="1.2em">
+					Made by Tristan Honda
+				</Text>
+				<Text fontSize="0.8em">Built with React/Redux, Node/Express, Postgres, ChakraUI</Text>
+        <Text>&copy; 2020</Text>
+			</Flex>
 		</Box>
 	);
 };
