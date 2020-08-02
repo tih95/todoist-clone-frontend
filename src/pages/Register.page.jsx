@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { RiMailLine, RiUserLine, RiLockPasswordLine, RiEyeLine, RiEyeOffLine } from 'react-icons/ri';
-import { toast } from 'react-toastify';
 import {
 	Box,
 	Input,
@@ -13,7 +12,8 @@ import {
 	Text,
 	InputLeftElement,
 	InputGroup,
-	InputRightElement
+	InputRightElement,
+	useToast
 } from '@chakra-ui/core';
 
 import { registerUser } from '../features/user/userSlice';
@@ -22,6 +22,7 @@ const Register = ({ history }) => {
 	const dispatch = useDispatch();
 	const loadingStatus = useSelector((state) => state.user.loading);
 
+	const toast = useToast();
 	const [ showPassword, setShowPassword ] = useState(false);
 	const formik = useFormik({
 		initialValues: {
@@ -42,12 +43,15 @@ const Register = ({ history }) => {
 				history.push('/');
 			}
 			else {
-				toast.error(resultAction.payload.errMsg);
+				toast({
+					title: resultAction.payload.errMsg,
+					duration: 3000,
+					isClosable: true,
+					status: 'error'
+				});
 			}
 		}
 	});
-
-	console.log('register page');
 
 	return (
 		<Box margin="0 auto" maxW="700px" padding="1.5em" color="#2b2c34" backgroundColor="#fffffe">

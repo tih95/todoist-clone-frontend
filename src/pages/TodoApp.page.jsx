@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjects } from '../features/projects/projectsSlice';
 import { selectUser } from '../features/user/userSlice';
 import { fetchTodos } from '../features/todos/todosSlice';
-import Sidebar from '../components/Sidebar.component';
-
 import { createConfig } from '../utils/config';
 
+import Sidebar from '../components/Sidebar.component';
+
 const Project = lazy(() => import('../pages/Project.page'));
+const Today = lazy(() => import('../pages/Today.page'));
 
 const TodoApp = ({ match }) => {
 	const dispatch = useDispatch();
@@ -34,8 +35,9 @@ const TodoApp = ({ match }) => {
 			<Sidebar />
 			<Suspense fallback={<div>Loading...</div>}>
 				<Switch>
-					<Route exact path={`${match.path}`} render={() => <Redirect to="/app/projects/inbox" />} />
+					<Route exact path={`${match.path}`} render={() => <Redirect to="/app/today" />} />
 					<Route exact path={`${match.path}/projects/:projectName`} component={Project} />
+					<Route exact path={`${match.path}/today`} component={Today} />
 				</Switch>
 			</Suspense>
 		</div>

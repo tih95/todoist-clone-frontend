@@ -9,26 +9,37 @@ import {
 	DrawerCloseButton,
 	DrawerContent,
 	DrawerBody,
-	IconButton
+	IconButton,
+	Menu,
+	MenuList,
+	MenuGroup,
+	MenuItem,
+	MenuButton,
+	MenuDivider
 } from '@chakra-ui/core';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-import { RiMenuLine } from 'react-icons/ri';
+import { RiMenuLine, RiSettings2Line, RiLogoutBoxRLine, RiAccountPinBoxLine } from 'react-icons/ri';
 
-import { selectUser, setUser } from '../features/user/userSlice';
+import { selectUser, resetUser } from '../features/user/userSlice';
+import { resetProjects } from '../features/projects/projectsSlice';
 import SidebarContent from './SidebarContent.component';
+import { resetTodos } from '../features/todos/todosSlice';
 
 const Header = () => {
 	const isShrink = useMediaQuery({ query: '(max-width: 750px)' });
 	const user = useSelector(selectUser);
 	const dispatch = useDispatch();
-	
+
 	const [ isDrawerOpen, setIsDrawerOpen ] = useState(false);
 
 	const handleLogout = () => {
 		window.localStorage.removeItem('loggedInUser');
-		dispatch(setUser(null));
+
+		dispatch(resetProjects());
+		dispatch(resetTodos());
+		dispatch(resetUser());
 	};
 
 	return (
@@ -68,9 +79,32 @@ const Header = () => {
 			</Link>
 
 			{user ? (
-				<Button size="sm" onClick={handleLogout}>
-					Log Out
-				</Button>
+				<Menu>
+					<MenuButton
+						variant="ghost"
+						color="white"
+						_hover={{ color: '#000', backgroundColor: '#E2E8F0' }}
+						as={IconButton}
+						icon={RiSettings2Line}
+						size="sm"
+						fontSize="20px"
+					/>
+					<MenuList>
+						<MenuGroup title="Account">
+							<Link to="/account">
+								<MenuItem>
+									<RiAccountPinBoxLine />
+									<Text marginLeft="1em">Account</Text>
+								</MenuItem>
+							</Link>
+						</MenuGroup>
+						<MenuDivider />
+						<MenuItem onClick={handleLogout}>
+							<RiLogoutBoxRLine />
+							<Text marginLeft="1em">Log Out</Text>
+						</MenuItem>
+					</MenuList>
+				</Menu>
 			) : (
 				<Box>
 					<Link to="/register">

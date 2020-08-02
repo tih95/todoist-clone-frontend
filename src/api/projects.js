@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const baseUrl = 'https://boiling-dawn-63574.herokuapp.com/api/projects';
+//const baseUrl = 'http://localhost:3001/api/projects';
 
 export const fetchProjectsApi = async (config) => {
   const resp = await axios.get(`${baseUrl}`, config);

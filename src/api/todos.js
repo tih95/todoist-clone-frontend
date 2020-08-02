@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const baseUrl = 'https://boiling-dawn-63574.herokuapp.com/api/todos';
+//const baseUrl = 'http://localhost:3001/api/todos';
 
 export const fetchTodosApi = async (config) => {
   const resp = await axios.get(`${baseUrl}`, config);

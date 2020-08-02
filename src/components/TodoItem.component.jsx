@@ -61,11 +61,12 @@ const TodoItem = ({ todo }) => {
 
 	return (
 		<Flex
+			height="30px"
 			justifyContent="space-between"
 			onMouseEnter={() => setIsTodoHover(true)}
 			onMouseLeave={() => setIsTodoHover(false)}
 			alignItems="center"
-			marginBottom="0.7em"
+			marginBottom="1em"
 		>
 			<Flex cursor="pointer" alignItems="center" color={todo.completed ? '#A0AEC0' : chooseColor()}>
 				{todo.completed ? (

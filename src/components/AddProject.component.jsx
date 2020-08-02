@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 import { BsCircleFill } from 'react-icons/bs';
 import * as Yup from 'yup';
 import {
@@ -19,7 +19,8 @@ import {
 	MenuItemOption,
 	MenuList,
 	MenuButton,
-	FormControl
+	FormControl,
+	useToast
 } from '@chakra-ui/core';
 
 import { addProject } from '../features/projects/projectsSlice';
@@ -27,8 +28,12 @@ import { selectUser } from '../features/user/userSlice';
 import colors from '../utils/colors';
 
 const AddProject = ({ isOpen, onClose }) => {
+	const history = useHistory();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
+	const loadingStatus = useSelector((state) => state.projects.loading);
+
+	const toast = useToast();
 	const formik = useFormik({
 		initialValues: {
 			name: '',
@@ -47,12 +52,23 @@ const AddProject = ({ isOpen, onClose }) => {
 			const resultAction = await dispatch(addProject({ values, config }));
 
 			if (addProject.fulfilled.match(resultAction)) {
-				toast.success(`Successfully create project ${resultAction.payload.name}`);
+				toast({
+					title: 'Successfully added project',
+					status: 'success',
+					duration: 3000,
+					isClosable: true
+				});
 				formik.resetForm();
 				onClose();
+				history.push(`/app/projects/${resultAction.payload.name}`);
 			}
 			else {
-				toast.error('Could not create project');
+				toast({
+					title: 'Could not create project',
+					status: 'error',
+					duration: 3000,
+					isClosable: true
+				});
 			}
 		}
 	});
@@ -106,9 +122,11 @@ const AddProject = ({ isOpen, onClose }) => {
 						</Button>
 						<Button
 							color="white"
-							backgroundColor="#6246ea"
-							_hover={{ backgroundColor: '#806aef' }}
+							variantColor="purple"
 							type="submit"
+							isLoading={loadingStatus === 'loading'}
+							loadingText="Adding project..."
+							isDisabled={formik.values.name === ''}
 						>
 							Add Project
 						</Button>

@@ -53,17 +53,20 @@ export const sortTodos = createAsyncThunk('todos/sortTodos', async ({method, con
   }
 })
 
+const initialState = {
+  userTodos: [],
+  loading: 'idle',
+  error: null
+}
+
 const todosSlice = createSlice({
   name: 'todos',
-  initialState: {
-    userTodos: [],
-    loading: 'idle',
-    error: null
-  },
+  initialState,
   reducers: {
     setTodos: (state, action) => {
       state.todos = action.payload;
-    }
+    },
+    resetTodos: state => initialState
   },
   extraReducers: {
     [fetchTodos.pending]: (state, action) => {
@@ -192,7 +195,7 @@ const todosSlice = createSlice({
   }
 })
 
-export const { setTodos } = todosSlice.actions;
+export const { setTodos, resetTodos } = todosSlice.actions;
 
 // SELECTORS
 export const selectAllTodos = state => state.todos.userTodos;

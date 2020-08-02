@@ -45,18 +45,21 @@ export const editProject = createAsyncThunk('projects/editProject', async ({ edi
   }
 })
 
+let initialState = {
+  userProjects: [],
+  loading: 'idle',
+  error: null,
+  selectedProject: null
+}
+
 const projectsSlice = createSlice({
 	name: 'projects',
-	initialState: {
-		userProjects: [],
-		loading: 'idle',
-    error: null,
-    selectedProject: null
-	},
+	initialState,
 	reducers: {
     setSelectedProject: (state, action) => {
       state.selectedProject = action.payload;
-    }
+    },
+    resetProjects: state => initialState
   },
 	extraReducers: {
 		[fetchProjects.pending]: (state, action) => {
@@ -101,7 +104,6 @@ const projectsSlice = createSlice({
           state.error = action.payload.errMsg;
         }
         else {
-          console.log('got here');
           state.error = action.error;
         }
       }
@@ -162,7 +164,7 @@ const projectsSlice = createSlice({
 });
 
 // ACTIONS
-export const { setSelectedProject } = projectsSlice.actions;
+export const { setSelectedProject, resetProjects } = projectsSlice.actions;
 
 // SELECTOR
 export const selectProjects = state => state.projects.userProjects;

@@ -1,24 +1,30 @@
 import React from 'react';
 import {
 	AlertDialog,
-	AlertDialogBody,
 	AlertDialogFooter,
 	AlertDialogContent,
 	AlertDialogOverlay,
-	Button
+	Button,
+	AlertDialogHeader
 } from '@chakra-ui/core';
 
-const DeleteConfirmationModal = ({ deleteFunction, onClose, isOpen }) => {
+const DeleteConfirmationModal = ({ deleteFunction, onClose, isOpen, loadingStatus }) => {
 	return (
 		<AlertDialog isOpen={isOpen} onClose={onClose}>
 			<AlertDialogOverlay />
 
 			<AlertDialogContent>
-				<AlertDialogBody>Are you sure you want to delete?</AlertDialogBody>
+				<AlertDialogHeader>Are you sure you want to delete?</AlertDialogHeader>
 
 				<AlertDialogFooter>
 					<Button onClick={onClose}>Cancel</Button>
-					<Button variantColor="red" onClick={deleteFunction} ml={3}>
+					<Button
+						isLoading={loadingStatus === 'loading'}
+						loadingText="Deleting..."
+						variantColor="red"
+						onClick={deleteFunction}
+						ml={3}
+					>
 						Delete
 					</Button>
 				</AlertDialogFooter>

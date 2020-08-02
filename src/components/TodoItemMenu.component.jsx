@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { ButtonGroup, IconButton } from '@chakra-ui/core';
 import { RiEdit2Line, RiDeleteBin6Line } from 'react-icons/ri';
+import { useSelector } from 'react-redux';
+
 import DeleteConfirmationModal from './DeleteConfirmationModal.component';
 
 const TodoItemMenu = ({ deleteTodo, editTodo, disabled }) => {
 	const [ isDeleteOpen, setIsDeleteOpen ] = useState(false);
+	const loadingStatus = useSelector((state) => state.todos.loading);
 
 	return (
 		<ButtonGroup>
@@ -28,6 +31,7 @@ const TodoItemMenu = ({ deleteTodo, editTodo, disabled }) => {
 				isOpen={isDeleteOpen}
 				deleteFunction={deleteTodo}
 				onClose={() => setIsDeleteOpen(false)}
+				loadingStatus={loadingStatus}
 			/>
 		</ButtonGroup>
 	);

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { RiLockPasswordLine, RiEyeLine, RiEyeOffLine, RiMailLine } from 'react-icons/ri';
 import * as Yup from 'yup';
-import { toast } from 'react-toastify';
 import {
 	Box,
 	Input,
@@ -13,7 +12,8 @@ import {
 	FormLabel,
 	InputLeftElement,
 	InputGroup,
-	InputRightElement
+	InputRightElement,
+	useToast
 } from '@chakra-ui/core';
 
 import { loginUser } from '../features/user/userSlice';
@@ -22,6 +22,7 @@ const Login = ({ history }) => {
 	const dispatch = useDispatch();
 	const loadingStatus = useSelector((state) => state.user.loading);
 	
+	const toast = useToast();
 	const [ showPassword, setShowPassword ] = useState(false);
 	const formik = useFormik({
 		initialValues: {
@@ -40,8 +41,12 @@ const Login = ({ history }) => {
 				history.push('/');
 			}
 			else {
-				console.log('got here');
-				toast.error(resultAction.payload.errMsg);
+				toast({
+					title: resultAction.payload.errMsg,
+					status: 'error',
+					isClosable: true,
+					duration: 3000
+				})
 			}
 		}
 	});

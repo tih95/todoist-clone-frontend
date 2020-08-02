@@ -32,6 +32,7 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 	const dispatch = useDispatch();
 	const projects = useSelector(selectProjects);
 	const user = useSelector(selectUser);
+	const loadingStatus = useSelector((state) => state.todos.loading);
 
 	const formik = useFormik({
 		initialValues: {
@@ -68,7 +69,11 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 			}
 		}
 	});
-	
+
+	if (!selectedProject || projects.length === 0) {
+		return null;
+	}
+
 	return (
 		<Box marginBottom="1.5em">
 			<form onSubmit={formik.handleSubmit}>
@@ -153,10 +158,13 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 										marginRight="0.6em"
 										fontSize="8px"
 										as={BsCircleFill}
-										color={isEditing ? projects.find((project) => project.p_id === formik.values.p_id).color : selectedProject.color}
+										color={projects.find((project) => project.p_id === formik.values.p_id).color}
 									/>
-
-									{isEditing ? projects.find((project) => project.p_id === formik.values.p_id).name : selectedProject.name}
+									{
+										projects.find((project) => {
+											return project.p_id === formik.values.p_id;
+										}).name
+									}
 								</MenuButton>
 								<MenuList placement="bottom-start">
 									<MenuOptionGroup
@@ -191,7 +199,14 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 							/>
 						</Flex>
 						<ButtonGroup>
-							<Button isDisabled={!formik.values.task} size="sm" variantColor="purple" type="submit">
+							<Button
+								isLoading={loadingStatus === 'loading'}
+								loadingText={isEditing ? 'Saving...' : 'Adding todo...'}
+								isDisabled={!formik.values.task}
+								size="sm"
+								variantColor="purple"
+								type="submit"
+							>
 								{isEditing ? 'Save' : 'Add'}
 							</Button>
 							{isEditing ? (

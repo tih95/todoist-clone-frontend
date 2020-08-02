@@ -28,8 +28,8 @@ import { selectUser } from '../features/user/userSlice';
 import { createConfig } from '../utils/config';
 
 const EditProject = ({ isOpen, onClose }) => {
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
+	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
 	const selectedProject = useSelector(selectSelectedProject);
 	const formik = useFormik({
 		initialValues: {
@@ -39,20 +39,21 @@ const EditProject = ({ isOpen, onClose }) => {
 		validationSchema: Yup.object({
 			name: Yup.string().required('Must have a name'),
 			color: Yup.string().required('Must choose a color')
-    }),
-    enableReinitialize: true,
+		}),
+		enableReinitialize: true,
 		onSubmit: async (values) => {
 			const config = createConfig(user);
-			
-      const editedProject = {
-        ...values,
-        p_id: selectedProject.p_id
-      }
-      await dispatch(editProject({editedProject, config}));
-      formik.resetForm();
-      onClose();
-    }
+
+			const editedProject = {
+				...values,
+				p_id: selectedProject.p_id
+			};
+			await dispatch(editProject({ editedProject, config }));
+			formik.resetForm();
+			onClose();
+		}
 	});
+
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
@@ -100,10 +101,7 @@ const EditProject = ({ isOpen, onClose }) => {
 						<Button mr={3} onClick={onClose}>
 							Close
 						</Button>
-						<Button
-							variantColor="purple"
-							type="submit"
-						>
+						<Button variantColor="purple" type="submit">
 							Save changes
 						</Button>
 					</ModalFooter>

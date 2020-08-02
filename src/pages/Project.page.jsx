@@ -20,15 +20,15 @@ import TodoForm from '../components/TodoForm.component';
 import TodoList from '../components/TodoList.component';
 import ProjectMenuItem from '../components/ProjectMenuItem.component';
 
+import { selectAllTodos, sortTodos } from '../features/todos/todosSlice';
+import { selectUser } from '../features/user/userSlice';
+import { createConfig } from '../utils/config';
 import {
 	selectProjects,
 	selectSelectedProject,
 	setSelectedProject,
 	deleteProject
 } from '../features/projects/projectsSlice';
-import { selectAllTodos, sortTodos } from '../features/todos/todosSlice';
-import { selectUser } from '../features/user/userSlice';
-import { createConfig } from '../utils/config';
 
 const Project = ({ match, history }) => {
 	const dispatch = useDispatch();
@@ -36,6 +36,7 @@ const Project = ({ match, history }) => {
 	const todos = useSelector(selectAllTodos);
 	const projects = useSelector(selectProjects);
 	const user = useSelector(selectUser);
+	const loadingStatus = useSelector((state) => state.projects.loading);
 
 	const shouldShrink = useMediaQuery({ query: '(max-width: 750px)' });
 	const [ showCompleted, setShowCompleted ] = useState(false);
@@ -82,6 +83,7 @@ const Project = ({ match, history }) => {
 				deleteFunction={handleDelete}
 				onClose={() => setShowDeleteModal(false)}
 				isOpen={showDeleteModal}
+				loadingStatus={loadingStatus}
 			/>
 
 			<Flex justifyContent="space-between" alignItems="center" marginBottom="1em">
@@ -93,7 +95,7 @@ const Project = ({ match, history }) => {
 						<RiMoreLine size={24} />
 					</MenuButton>
 					<MenuList>
-						<ProjectMenuItem 
+						<ProjectMenuItem
 							isDisabled={selectedProject.name === 'inbox'}
 							icon={<RiEdit2Line />}
 							handleClick={() => setShowEditModal(!showEditModal)}
@@ -101,17 +103,17 @@ const Project = ({ match, history }) => {
 						/>
 						<MenuDivider />
 						<MenuGroup>
-							<ProjectMenuItem 
+							<ProjectMenuItem
 								label="Sort by name"
 								handleClick={() => handleSort('name')}
 								icon={<TiSortAlphabetically />}
 							/>
-							<ProjectMenuItem 
+							<ProjectMenuItem
 								label="Sort by date"
 								handleClick={() => handleSort('date')}
 								icon={<RiCalendarCheckLine />}
 							/>
-							<ProjectMenuItem 
+							<ProjectMenuItem
 								label="Sort by priority"
 								handleClick={() => handleSort('priority')}
 								icon={<AiFillFlag />}
@@ -119,7 +121,7 @@ const Project = ({ match, history }) => {
 						</MenuGroup>
 
 						<MenuDivider />
-						<ProjectMenuItem 
+						<ProjectMenuItem
 							handleClick={() => setShowCompleted(!showCompleted)}
 							icon={!showCompleted ? <RiCheckboxLine /> : <RiCheckboxIndeterminateLine />}
 							label={showCompleted ? 'Hide Completed Tasks' : 'Show Completed Tasks'}
