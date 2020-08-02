@@ -70,10 +70,6 @@ const TodoForm = ({ selectedProject, todo, isEditing, cancelEdit }) => {
 		}
 	});
 
-	if (!selectedProject || projects.length === 0) {
-		return null;
-	}
-
 	return (
 		<Box marginBottom="1.5em">
 			<form onSubmit={formik.handleSubmit}>
