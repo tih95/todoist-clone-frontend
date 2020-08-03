@@ -60,7 +60,13 @@ const userSlice = createSlice({
 		setUser: (state, action) => {
 			state.currentUser = action.payload;
 		},
-		resetUser: state => initialState
+		resetUser: state => {
+			window.localStorage.removeItem('loggedInUser');
+			return {
+				...initialState,
+				currentUser: null
+			};
+		}
 	},
 	extraReducers: {
 		[registerUser.pending]: (state, action) => {

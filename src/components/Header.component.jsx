@@ -18,7 +18,7 @@ import {
 	MenuDivider
 } from '@chakra-ui/core';
 import { useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { RiMenuLine, RiSettings2Line, RiLogoutBoxRLine, RiAccountPinBoxLine } from 'react-icons/ri';
 
@@ -31,17 +31,15 @@ const Header = () => {
 	const isShrink = useMediaQuery({ query: '(max-width: 750px)' });
 	const user = useSelector(selectUser);
 	const dispatch = useDispatch();
-	const history = useHistory();
 
 	const [ isDrawerOpen, setIsDrawerOpen ] = useState(false);
 
 	const handleLogout = () => {
-		window.localStorage.removeItem('loggedInUser');
-
-		dispatch(resetProjects());
-		dispatch(resetTodos());
-		dispatch(resetUser());
-		history.push('/');
+			dispatch(resetUser());
+		 dispatch(resetProjects());
+		 dispatch(resetTodos());
+		 
+		//history.push('/');
 	};
 
 	return (
